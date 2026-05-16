@@ -1,0 +1,5 @@
+slam_toolbox:
+  odom_frame: odom
+  base_frame: base_link
+  use_sim_time: true
+  mode: mapping

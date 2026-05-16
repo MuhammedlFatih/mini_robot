@@ -1,0 +1,26 @@
+import launch
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        # 'config_file' adlı bir launch argümanı tanımlıyoruz, varsayılan olarak odometry_config.yaml dosyasını alacak
+        DeclareLaunchArgument(
+            'config_file', 
+            default_value='$(find your_package)/config/odometry_config.yaml',  # varsayılan değer
+            description='Path to the configuration file for SLAM tool'  # Açıklama
+        ),
+        
+        # SLAM Toolbox node'unu başlatıyoruz
+        Node(
+            package='slam_toolbox',
+            executable='async_slam_toolbox_node',
+            name='slam_toolbox',
+            output='screen',
+            parameters=[LaunchConfiguration('config_file')],  # 'config_file' argümanını parametre olarak gönderiyoruz
+            remappings=[('/scan', '/your_robot/scan')],  # LiDAR verisi için doğru topic eşlemesi yapıyoruz
+        ),
+    ])
+
